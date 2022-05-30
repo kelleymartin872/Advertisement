@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class AdvertisementController extends Controller
 {
     /**
+     * @param AdvertisementListRequest $request
      * @return JsonResponse
      */
     public function list(AdvertisementListRequest $request): JsonResponse

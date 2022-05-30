@@ -106,12 +106,12 @@ export default {
     },
     computed:{
         sortOrder() {
-            return this.sortDecrease ? 'desc' : 'asc'
+            return this.sortDecrease ? 'asc' : 'desc'
         },
 
         requestItemsOptions() {
             return {
-                sort_order: this.sortOrder ? 'desc' : 'asc',
+                sort_order: this.sortOrder,
                 sort: this.sortParam ? this.sortParam : 'id',
                 page: 1,
             }
@@ -164,6 +164,7 @@ export default {
                         let i = this.advertisements.map(item => item.id).indexOf(id);
                         this.advertisements.splice(i, 1)
                         this.$router.push({name: 'home'})
+                        this.fetchItems()
                     })
                     .catch(function (error) {
                         console.error(error);
