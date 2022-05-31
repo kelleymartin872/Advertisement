@@ -47,12 +47,30 @@ export default {
         }
     },
     methods: {
-        addFiles() {
-            if (this.files.length > this.maxImages-1) {
-                this.showNotification('You cannot upload more than ' + this.maxImages + ' images')
-                return
-            }
+        showMaxImagesError() {
+            this.showNotification('You cannot upload more than ' + this.maxImages + ' images')
+        },
+        getInputFiles() {
+            return this.$refs.files.files
+        },
+        openAddFilesMenu() {
             this.$refs.files.click()
+        },
+        addFiles() {
+            if (this.files.length >= this.maxImages) {
+                this.showMaxImagesError()
+            } else {
+                this.openAddFilesMenu()
+            }
+        },
+        handleFileUploads() {
+            let uploadedFiles = this.getInputFiles();
+
+            if (uploadedFiles.length > this.maxImages) {
+                this.showMaxImagesError()
+            } else {
+                this.files.push(...uploadedFiles)
+            }
         },
         addAdvertisement() {
             let formData = new FormData();
@@ -79,18 +97,6 @@ export default {
                     });
             })
         },
-        handleFileUploads() {
-            let uploadedFiles = this.$refs.files.files;
-
-            if (uploadedFiles.length > this.maxImages) {
-                this.showNotification('You cannot upload more than ' + this.maxImages + ' images')
-                return
-            }
-
-            for(var i = 0; i < uploadedFiles.length; i++) {
-                this.files.push(uploadedFiles[i]);
-            }
-        },
         removeFile( key ) {
             this.files.splice(key, 1);
         },
@@ -115,7 +121,7 @@ input[type="file"] {
     top: -500px;
 }
 div.file-listing {
-    width: 660px;
+    width: 636px;
 }
 span.remove-file {
     color: red;
