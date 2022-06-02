@@ -4,33 +4,35 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdvertisementListRequest;
-use App\Http\Requests\AdvertisementRequest;
+use App\Http\Requests\UserRequest;
+use App\Http\Resources\Advertisement\AdvertisementResource;
 use App\Models\Advertisement;
 use App\Models\AdvertisementImage;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 
 class AdvertisementController extends Controller
 {
     /**
      * @param AdvertisementListRequest $request
-     * @return JsonResponse
+     * @return AnonymousResourceCollection
      */
-    public function list(AdvertisementListRequest $request): JsonResponse
+    public function list(AdvertisementListRequest $request): AnonymousResourceCollection
     {
         $sort = $request->sort ?? 'id';
         $sortOrder = $request->sort_order ?? 'desc';
         $data = Advertisement::orderBy($sort, $sortOrder)->paginate(5);
-        return response()->json($data);
+        return AdvertisementResource::collection($data);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param AdvertisementRequest $request
+     * @param UserRequest $request
      * @return JsonResponse
      */
-    public function store(AdvertisementRequest $request): JsonResponse
+    public function store(UserRequest $request): JsonResponse
     {
         $advertisement = new Advertisement([
             'title' => $request->title,
@@ -56,17 +58,17 @@ class AdvertisementController extends Controller
         return response()->json([
             'success' => true,
             'message' => "The advertisement successfully added"
-        ]);
+        ], 201);
     }
 
     /**
-     * @param  int  $id
-     * @return JsonResponse
+     * @param int $id
+     * @return AdvertisementResource
      */
-    public function show($id): JsonResponse
+    public function show(int $id): AdvertisementResource
     {
-        $advertisement = Advertisement::find($id);
-        return response()->json($advertisement->load('images'));
+        $advertisement = Advertisement::findOrFail($id);
+        return new AdvertisementResource($advertisement->load('images'));
     }
 
     /**
@@ -75,20 +77,20 @@ class AdvertisementController extends Controller
      */
     public function edit(int $id): JsonResponse
     {
-        $advertisement = Advertisement::find($id);
+        $advertisement = Advertisement::findOrFail($id);
         return response()->json($advertisement);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param AdvertisementRequest $request
+     * @param UserRequest $request
      * @param int $id
      * @return JsonResponse
      */
-    public function update(AdvertisementRequest $request, int $id): JsonResponse
+    public function update(UserRequest $request, int $id): JsonResponse
     {
-        $advertisement = Advertisement::find($id);
+        $advertisement = Advertisement::findOrFail($id);
         $advertisement->update($request->all());
 
         return response()->json([
@@ -105,12 +107,12 @@ class AdvertisementController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $advertisement = Advertisement::find($id);
+        $advertisement = Advertisement::findOrFail($id);
         $advertisement->delete();
 
         return response()->json([
             'success' => true,
             'message' => "The advertisement successfully deleted"
-        ]);
+        ], 204);
     }
 }

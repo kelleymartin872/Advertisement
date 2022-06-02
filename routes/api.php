@@ -20,7 +20,7 @@ Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanct
 
 Route::group(['prefix' => 'advertisement'], function () {
     Route::get('/', [AdvertisementController::class, 'list']);
-    Route::get('show/{id}', [AdvertisementController::class, 'show']);
+    Route::get('/{id}', [AdvertisementController::class, 'show']);
 });
 
 Route::group(['prefix' => 'advertisement', 'middleware' => 'auth:sanctum'], function () {

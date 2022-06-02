@@ -30,7 +30,7 @@
                         <td>{{ advertisement.id }}</td>
                         <td><router-link :to="{name: 'advertisement', params: { id: advertisement.id }}">{{ advertisement.title }}</router-link></td>
                         <td>{{ advertisement.description }}</td>
-                        <td>{{ format_date(advertisement.created_at) }}</td>
+                        <td>{{ advertisement.created_at }}</td>
                         <td v-if="isLoggedIn && currentUserId === advertisement.user_id">
                             <div class="btn-group" role="group">
                                 <router-link :to="{name: 'editadvertisement', params: { id: advertisement.id }}" class="btn btn-primary">Edit
@@ -79,7 +79,7 @@ export default {
             last_page: null,
             isLoggedIn: false,
             currentUserId: null,
-            advertisements: [],
+            advertisements: {},
             columns: [
                 createColumnData('id', 'ID'),
                 createColumnData('title', 'Title'),
@@ -141,8 +141,8 @@ export default {
             const response = await this.requestItemsApi(params)
 
             this.advertisements = response.data.data;
-            this.page = response.data.current_page;
-            this.last_page = response.data.last_page;
+            this.page = response.data.meta.current_page;
+            this.last_page = response.data.meta.last_page;
         },
 
         async requestItemsApi(params) {
@@ -170,12 +170,7 @@ export default {
                         console.error(error);
                     });
             })
-        },
-        format_date(value){
-            if (value) {
-                return moment(String(value)).format('YYYY-MM-DD hh:mm')
-            }
-        },
+        }
     }
 }
 </script>

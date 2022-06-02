@@ -14,7 +14,7 @@
             <div class="row mb-3">
                 <div class="col-6"></div>
                 <div class="col-6 text-end">
-                    <u>{{ format_date(advertisement.created_at) }}</u>
+                    <u>{{ advertisement.created_at }}</u>
                 </div>
             </div>
             <h5>{{ advertisement.title }}</h5>
@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import moment from 'moment';
 import ModalImage from "./ModalImage";
 
 export default {
@@ -60,20 +59,15 @@ export default {
         },
     },
     created() {
-        this.$axios.get(`/api/advertisement/show/${this.$route.params.id}`)
+        this.$axios.get(`/api/advertisement/${this.$route.params.id}`)
             .then(response => {
-                this.advertisement = response.data;
+                this.advertisement = response.data.data;
             })
             .catch(function (error) {
                 console.error(error);
             });
     },
     methods: {
-        format_date(value) {
-            if (value) {
-                return moment(String(value)).format('YYYY-MM-DD')
-            }
-        },
         getImgUrl(pic) {
             return '/uploads/profile_images/' + pic;
         },

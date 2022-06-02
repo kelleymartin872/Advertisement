@@ -3,19 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
     /**
-     * @param Request $request
+     * @param UserRequest $request
      * @return JsonResponse
      */
-    public function login(Request $request): JsonResponse
+    public function login(UserRequest $request): JsonResponse
     {
         $credentials = [
             'email' => $request->email,
@@ -38,7 +37,10 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-    public function logout()
+    /**
+     * @return JsonResponse
+     */
+    public function logout(): JsonResponse
     {
         try {
             Session::flush();
