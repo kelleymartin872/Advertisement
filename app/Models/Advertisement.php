@@ -18,6 +18,13 @@ class Advertisement extends Model
         'user_id'
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        self::deleting(static fn(Advertisement $advertisement) => $advertisement->images()->get()->each->delete());
+    }
+
     public function getKeyType()
     {
         return 'string';

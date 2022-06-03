@@ -27,12 +27,6 @@ return new class extends Migration
             $table->integer('advertisement_id');
             $table->string('path');
             $table->timestamps();
-
-            $table->foreign('advertisement_id')
-                ->references('id')
-                ->on('advertisements')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
         });
     }
 

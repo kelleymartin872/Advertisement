@@ -15,4 +15,11 @@ class AdvertisementImage extends Model
         'advertisement_id',
         'path'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::deleted(static fn (AdvertisementImage $model) => $model->path ? @unlink(public_path('uploads/profile_images/') . $model->path) : null);
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdvertisementListRequest;
+use App\Http\Requests\AdvertisementRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\Advertisement\AdvertisementResource;
 use App\Models\Advertisement;
@@ -29,10 +30,10 @@ class AdvertisementController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param UserRequest $request
+     * @param AdvertisementRequest $request
      * @return JsonResponse
      */
-    public function store(UserRequest $request): JsonResponse
+    public function store(AdvertisementRequest $request): JsonResponse
     {
         $advertisement = new Advertisement([
             'title' => $request->title,
@@ -84,11 +85,11 @@ class AdvertisementController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param UserRequest $request
+     * @param AdvertisementRequest $request
      * @param int $id
      * @return JsonResponse
      */
-    public function update(UserRequest $request, int $id): JsonResponse
+    public function update(AdvertisementRequest $request, int $id): JsonResponse
     {
         $advertisement = Advertisement::findOrFail($id);
         $advertisement->update($request->all());
